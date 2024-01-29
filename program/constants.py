@@ -5,10 +5,13 @@ from decouple import config # Enable us to access our .env variables
 MODE = "DEVELOPMENT" # or "PRODUCTION"
 
 # Close all open positions and orders
-ABORT_ALL_POSITIONS = False
+ABORT_ALL_POSITIONS = True
 
 # Find Cointegrated Pairs
 FIND_COINTEGRATED = True
+
+#
+MANAGE_EXITS = True
 
 # Place Tardes
 PLACE_TRADES = True
@@ -23,7 +26,7 @@ WINDOW = 21 # Do a rolling moving average based on 21 days
 MAX_HALF_LIFE = 24
 ZSCORE_THRESHOLD = 1.5
 USD_PER_TRADE = 50 # $50 on each short and $50 on each long
-USD_MIN_COLLATERAL = 1800 # the portfolio value in your DYDX account
+USD_MIN_COLLATERAL = 1500 # the min. portfolio value in your DYDX account # default: 1800
 
 # Threshold - Closing
 # If we open a trate when Z-score at -1.5 and close the trade when it cross +1.5 (or 0)
