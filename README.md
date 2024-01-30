@@ -169,3 +169,66 @@ While True + CRON
 2. Send message from Python
 
 - pip3 install requests
+
+- `send_messa()` in `func_messaging.py`
+
+## Stage 5 - AWS
+
+- AWS (Free tier: EC2 compute - 750 hrs)
+  - VPC
+    - Public Subnet
+      - EC2
+        - Code (from GitHub)
+        - .env
+        - venv (from txt file)
+        - CRON
+        - Set Inbound SSH & Outbound Requests
+
+### AWS
+
+1. Create Security group
+
+- Inbound Rule - SSH
+
+2. Launch EC2 instance
+
+- Ubuntu
+
+- Architecture: Arm for M1 chip but x86 for free tier
+
+- Select existing security group
+
+3. Install Python
+
+- Connect the instance
+
+- Ubuntu terminal
+
+```
+sudo apt-get update
+
+sudo apt-get install python3.11
+
+sudo git clone https://...
+
+pip3 instll -r requirements.txt
+
+sudo apt install python3-pip
+
+```
+
+We don't set venv on EC2 for easier access later on. But it can be done.
+
+```
+touch .env
+
+sudo nano .env
+
+# Paste the variables
+
+control + x
+
+y
+
+Enter
+```
