@@ -10,10 +10,8 @@ from func_messaging import send_message
 # MAIN FUNCTION
 if __name__ == "__main__":
     
-    success = send_message("another test msg from Python")
-    print(success)
-    exit(1)
-
+    # Message on start
+    send_message("Bot launch successful")
 
     print("")
     print("===== CONNECTION =====")
@@ -25,6 +23,7 @@ if __name__ == "__main__":
         client = connect_dydx()
     except Exception as e:
         print("Error connecting to client: ", e) # For log file
+        send_message(f"Error connecting to client: {e}")
         exit(1) # Kill the Python script 
         
     # Abort all open positions
@@ -39,6 +38,7 @@ if __name__ == "__main__":
             clsoe_orders = abort_all_positions(client)
         except Exception as e:
             print("Error closing all positions: ", e)
+            send_message(f"Error closing all positions: {e}")
             exit(1)
             
     # Find Cointegrated Pairs
@@ -53,6 +53,7 @@ if __name__ == "__main__":
             df_market_prcies = construct_market_prices(client)
         except Exception as e:
             print("Error constructing market prices: ", e)
+            send_message(f"Error constructing market prices: {e}")
             exit(1)
         
         # Stored cointegrated pairs
@@ -65,6 +66,7 @@ if __name__ == "__main__":
                 exit(1) # Even no logic error, if no cointegrated pairs, we stop the script
         except Exception as e:
             print("Error saving conintegrated pairs: ", e)
+            send_message(f"Error saving conintegrated pairs: {e}")
             exit(1)
         
     # Run as always on
@@ -81,6 +83,7 @@ if __name__ == "__main__":
                 print(result)
             except Exception as e:
                 print("Error managing exiting positions: ", e)
+                send_message(f"Error managing exiting positions: {e}")
                 exit(1)
             
         # Place trades for opening positions
@@ -93,5 +96,6 @@ if __name__ == "__main__":
                 print("Finding trading opportunities...")
                 open_positions(client)
             except Exception as e:
-                print("Error finding trading pairs: ", e)
+                print("Error opening trades: ", e)
+                send_message(f"Error opening trades: {e}")
                 exit(1)

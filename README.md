@@ -153,3 +153,19 @@ While True + CRON
 - CLOSE_AT_ZSCORE_CROSS (Trigger) -> calculate current z-score -> is_close
 
 - is_close (Trigger) -> determine args -> place opposite order
+
+## Stage 4 - Telegram
+
+1. Create a bot @BotFather
+
+- Get token of the created bot (save to .env)
+
+- Get your personal ChatID (save to .env)
+
+- Send 3 test messages in the bot
+
+- Send a mesage through API via the url: "https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={chat_id}&text={message}"
+
+2. Send message from Python
+
+- pip3 install requests
