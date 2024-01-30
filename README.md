@@ -232,3 +232,43 @@ y
 
 Enter
 ```
+
+After making updates on Github,
+
+```
+# Since we have added .env here
+git reset --hard HEAD
+
+git pull origin --rebase
+```
+
+In case you want to pull a fresh new git from GitHub, you can delete the whole directory, and then pull from Github.
+
+```
+rm -rf <folderName>
+```
+
+### CRON
+
+https://crontab.guru/
+
+```
+crontab -e
+
+0 12 * * * /bin/timeout -s 2 86330 python3 dydx_bot/program/main.py > output.txt  2>&1
+
+*/5 * * * * /bin/timeout -s 2 290 python3 dydx_bot/program/main.py > output.txt  2>&1
+
+crontab -l
+
+```
+
+- `*/5 * * * *`: runs the job every 5 mins == 300 seconds
+
+- `/bin/timeout -s 2 290`: kill the job after 290 seconds
+
+- `python3 dydx_bot/program/main.py`: path to run the code (job)
+
+- `> output.txt`: print output to file
+
+- `2>&1`: end
