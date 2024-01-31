@@ -104,7 +104,7 @@ class BotAgent:
     def open_trades(self):
         
         print("---")
-        print(f"Working on {self.market_1} & {self.market_2}")
+        print(f"Placing trade on {self.market_1} & {self.market_2}")
 
         # Print status - Opening first order
         print("---")

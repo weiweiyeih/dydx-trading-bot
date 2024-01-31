@@ -3,6 +3,7 @@ from func_utils import format_number
 from func_public import get_candles_recent
 from func_cointegration import calculate_zscore
 from func_private import place_market_order
+from func_messaging import send_message # debug
 import json
 import time
 
@@ -23,6 +24,8 @@ def manage_trade_exits(client):
     try:
         open_positions_file = open("bot_agents.json")
         open_positions_dict = json.load(open_positions_file)
+        print(f"{len(open_positions_dict)} pairs extacted from json file") # debug
+        
     except:
         # In case no file exists
         return "complete"
@@ -59,6 +62,8 @@ def manage_trade_exits(client):
         position_size_m2 = position["order_m2_size"]
         position_side_m2 = position["order_m2_side"]
         
+        print("") 
+        
         # Protect API
         time.sleep(0.5)
         
@@ -67,6 +72,13 @@ def manage_trade_exits(client):
         order_market_m1 = order_m1.data["order"]["market"]
         order_size_m1 = order_m1.data["order"]["size"]
         order_side_m1 = order_m1.data["order"]["side"]
+        
+        # Use "position_size_m1" to format "order_size_m1" 
+        # To fix: position_size_m1(2.0) != order_size_m1(2)
+        order_size_m1 = float(order_size_m1)
+        position_size_m1 = float(position_size_m1)
+        order_size_m1 = format_number(order_size_m1, position_size_m1) # str
+        position_size_m1 = str(position_size_m1) # str
         
         # Protect API
         time.sleep(0.5)
@@ -77,6 +89,13 @@ def manage_trade_exits(client):
         order_size_m2 = order_m2.data["order"]["size"]
         order_side_m2 = order_m2.data["order"]["side"]
         
+        # Use "position_size_m2" to format "order_size_m2" 
+        # To fix: position_size_m2(2.0) != order_size_m2(2)
+        order_size_m2 = float(order_size_m2)
+        position_size_m2 = float(position_size_m2)
+        order_size_m2 = format_number(order_size_m2, position_size_m2) # str
+        position_size_m2 = str(position_size_m2) # str
+        
         # Perform matching check
         check_m1 = position_market_m1 == order_market_m1 and position_size_m1 == order_size_m1 and position_side_m1 == order_side_m1
         check_m2 = position_market_m2 == order_market_m2 and position_size_m2 == order_size_m2 and position_side_m2 == order_side_m2
@@ -85,6 +104,21 @@ def manage_trade_exits(client):
         # Guard: If not all match exit with error
         if not check_m1 or not check_m2 or not check_live:
             print(f"Warning: Not all open positions match exchange records for {position_market_m1} and {position_market_m2}")
+            
+            print("check_m1: ", check_m1) # debug
+            print(position_market_m1, order_market_m1) # debug
+            print(position_size_m1, order_size_m1) # debug
+            print(type(position_size_m1), type(order_size_m1)) # debug
+            print(position_side_m1, order_side_m1) # debug
+            print("check_m2: ", check_m2) # debug
+            print(position_market_m2, order_market_m2) # debug
+            print(position_size_m2, order_size_m2) # debug
+            print(type(position_size_m2), type(order_size_m2)) # debug
+            print(position_side_m2, order_side_m2) # debug
+            print("check_live: ", check_live) # debug
+            print(position_market_m1 in markets_live) # debug
+            print(position_market_m2 in markets_live) # debug
+            exit(1) # debug
             continue
         
         # Get prices
@@ -126,7 +160,6 @@ def manage_trade_exits(client):
             print(f"z_score_current: {z_score_current}")
             print(f"To colse: {is_close}")
             print("=====")
-            print("")
             ########### William's note (start) #############
                 
         ###
@@ -210,7 +243,7 @@ def manage_trade_exits(client):
             save_output.append(position)
 
     # Save remaining items
-    print(f"{len(save_output)} Items remaining. Saving file...")
+    print(f"{len(save_output)} Items remaining. Saving json file...")
     with open("bot_agents.json", "w") as f:
         json.dump(save_output, f)
         

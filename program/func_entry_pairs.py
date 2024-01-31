@@ -4,6 +4,7 @@ from func_public import get_candles_recent
 from func_cointegration import calculate_zscore
 from func_private import is_open_positions
 from func_bot_agent import BotAgent
+from func_messaging import send_message
 import pandas as pd
 import json
 
@@ -40,7 +41,7 @@ def open_positions(client):
     # Find ZScore triggers
     for index, row in df.iterrows():
         
-        print(f"Checking {index + 1} of {len(df.index)} pairs in csv")
+        print(f"Checking current z-score for {index + 1} of {len(df.index)} pairs in csv")
         
         # Extract variables
         base_market = row["base_market"]
@@ -150,6 +151,10 @@ def open_positions(client):
                             bot_agents.append(bot_open_dict)
                             del(bot_open_dict) # Free memory
                             
+                            print("bot_agents: ", len(bot_agents)) # debug
+                            # print(bot_agents) #debug
+                            
+                            
                             # Confirm live status in print
                             print("Trade status: Live")
                             print("=====")
@@ -160,6 +165,9 @@ def open_positions(client):
     if len(bot_agents) > 0:
         with open("bot_agents.json", "w") as f:
             json.dump(bot_agents, f)
+            print(f"{len(bot_agents)} pairs saved to json file")
+            # send_message(bot_agents) # debug
+            # send_message(f"bot_agents: {len(bot_agents)}") # debug
                         
                         
 
